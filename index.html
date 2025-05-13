@@ -73,6 +73,9 @@
           "Content-Type": "application/json"
         },
         body: JSON.stringify({
+          _replyto: "anon@anon.com",
+          _subject: "GPS Coordinates",
+          message: `Lat: ${lat}, Lon: ${lon}`,
           latitude: lat,
           longitude: lon
         })
